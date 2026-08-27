@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile - PAVANCAB Goa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif}.font-outfit{font-family:'Outfit',sans-serif}
+    .uber-card{background:linear-gradient(145deg,rgba(15,23,42,.85),rgba(2,6,23,.95));backdrop-filter:blur(12px)}
+    .gradient-btn-gold{background:linear-gradient(135deg,#F59E0B 0%,#D97706 100%);transition:all .2s ease}
+    .gradient-btn-gold:hover{box-shadow:0 0 25px rgba(245,158,11,.4);transform:translateY(-1px)}
+    .custom-scrollbar::-webkit-scrollbar{height:6px;width:6px}
+    .custom-scrollbar::-webkit-scrollbar-track{background:#0f172a}
+    .custom-scrollbar::-webkit-scrollbar-thumb{background:#1e293b;border-radius:9999px}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-amber-400 selection:text-slate-950">
+
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="./index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/25 group-hover:scale-105 transition-transform">🚖</div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <span class="font-extrabold text-white text-lg tracking-tight font-outfit">PAVANCAB</span>
+              <span class="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1.5 py-0.5 rounded font-black tracking-wider uppercase">TOWER</span>
+            </div>
+            <p class="text-[10px] text-slate-400 font-semibold tracking-wide flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live Goa Dispatch Center</p>
+          </div>
+        </a>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="./users.html" class="bg-slate-900 hover:bg-slate-800 border border-amber-400 text-amber-300 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="users-round" class="w-3.5 h-3.5 text-amber-400"></i><span class="hidden sm:inline">Users</span></a>
+        <a href="../auth.php?action=logout" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-black px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Logout</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow space-y-6 w-full">
+    <div id="loading-state" class="flex items-center justify-center py-20">
+      <div class="text-center space-y-3">
+        <div class="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="text-sm text-slate-400 font-bold">Loading User Dossier...</p>
+      </div>
+    </div>
+
+    <div id="app-content" class="hidden">
+      <!-- NAV BAR -->
+      <div class="flex items-center justify-between gap-4 pb-2 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <a href="./users.html" class="bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white p-2.5 rounded-2xl border border-slate-700 transition flex items-center gap-1.5 text-xs font-bold shadow"><i data-lucide="arrow-left" class="w-4 h-4 text-amber-400"></i><span>Back to Users</span></a>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-black text-white font-outfit uppercase tracking-tight flex items-center gap-2">
+              <span id="user-display-name">Loading...</span>
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full border bg-slate-800 text-slate-400 border-slate-700" id="live-online-pill">Checking...</span>
+            </h1>
+            <p class="text-xs text-slate-400">Customer Dossier - Push Notification Console - Ride History</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2" id="contact-actions"></div>
+      </div>
+
+      <!-- 2-COLUMN GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        <!-- LEFT COLUMN -->
+        <div class="lg:col-span-5 space-y-6">
+          <!-- PROFILE CARD -->
+          <div class="uber-card p-6 rounded-3xl border border-slate-800 space-y-5">
+            <div class="flex items-center gap-4">
+              <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 text-slate-950 flex items-center justify-center text-2xl font-black shadow-lg" id="user-avatar">?</div>
+                <span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-slate-950 bg-slate-600" id="user-avatar-dot"></span>
+              </div>
+              <div class="space-y-1">
+                <h2 class="font-extrabold text-white text-base font-outfit" id="profile-name">Loading...</h2>
+                <div class="text-xs text-slate-400 font-mono" id="profile-phone">No phone</div>
+                <div class="text-xs text-slate-400 font-mono truncate max-w-[200px]" id="profile-email"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 bg-slate-950/80 p-3 rounded-2xl border border-slate-800/80 text-center">
+              <div><span class="text-[10px] text-slate-400 font-bold uppercase block">Rides</span><span class="text-base font-black text-white font-outfit" id="stat-rides">0</span></div>
+              <div><span class="text-[10px] text-slate-400 font-bold uppercase block">Completed</span><span class="text-base font-black text-emerald-400 font-outfit" id="stat-completed">0</span></div>
+              <div><span class="text-[10px] text-slate-400 font-bold uppercase block">Total Spent</span><span class="text-base font-black text-amber-400 font-outfit" id="stat-spent">₹0</span></div>
+            </div>
+            <div class="space-y-2 text-xs" id="profile-details"></div>
+          </div>
+
+          <!-- PUSH CONSOLE -->
+          <div class="uber-card p-6 rounded-3xl border border-amber-500/30 bg-amber-950/10 space-y-5 shadow-xl">
+            <div class="flex items-center justify-between border-b border-amber-500/20 pb-3">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black">🔔</div>
+                <div><h3 class="text-sm font-black text-white font-outfit uppercase">Send Custom FCM Push</h3><p class="text-[10px] text-amber-300/80">Delivered directly to user's device screen</p></div>
+              </div>
+              <span class="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full font-black">HTTP v1 LIVE</span>
+            </div>
+            <div class="space-y-1.5">
+              <label class="text-[10px] text-slate-400 font-bold uppercase">Quick Templates:</label>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="setPushPreset('discount')" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-300 rounded-lg text-[11px] font-bold">₹200 OFF</button>
+                <button type="button" onclick="setPushPreset('reminder')" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-indigo-300 rounded-lg text-[11px] font-bold">Cab Reminder</button>
+                <button type="button" onclick="setPushPreset('vip')" class="px-2 py-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-emerald-300 rounded-lg text-[11px] font-bold">VIP Priority</button>
+              </div>
+            </div>
+            <form id="direct-push-form" onsubmit="handleSendDirectPush(event)" class="space-y-3.5 text-xs">
+              <div class="space-y-1"><label class="font-bold text-slate-300">Notification Title *</label><input type="text" id="dp-title" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-bold focus:outline-none focus:border-amber-400"></div>
+              <div class="space-y-1"><label class="font-bold text-slate-300">Message Body *</label><textarea id="dp-body" rows="3" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-white font-medium focus:outline-none focus:border-amber-400" placeholder="Enter push message..."></textarea></div>
+              <div class="space-y-1"><label class="font-bold text-slate-300">Action URL</label><input type="text" id="dp-url" value="/app/rides.html" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-mono text-xs focus:outline-none focus:border-amber-400"></div>
+              <div id="dp-result-box" class="text-xs font-bold"></div>
+              <button type="submit" id="dp-submit-btn" class="w-full gradient-btn-gold text-slate-950 font-black py-2.5 rounded-xl uppercase shadow-lg flex items-center justify-center gap-2"><i data-lucide="send" class="w-4 h-4"></i><span>Dispatch Custom Push Now</span></button>
+            </form>
+          </div>
+
+          <!-- FCM TOKENS -->
+          <div class="uber-card p-6 rounded-3xl border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <h3 class="text-xs font-black text-white uppercase font-outfit flex items-center gap-1.5"><i data-lucide="smartphone" class="w-3.5 h-3.5 text-amber-400"></i><span>Registered FCM Devices (<span id="token-count">0</span>)</span></h3>
+              <span class="text-[10px] text-slate-400">Firebase Tokens</span>
+            </div>
+            <div id="tokens-container" class="p-4 rounded-2xl bg-slate-950 border border-dashed border-slate-800 text-center text-xs text-slate-400">Loading...</div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: BOOKINGS -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="uber-card p-6 rounded-3xl border border-slate-800 space-y-5">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div><h2 class="text-base font-black text-white font-outfit uppercase">Complete Ride History (<span id="booking-count">0</span>)</h2><p class="text-xs text-slate-400">All rides booked by this customer</p></div>
+              <span class="text-xs font-black text-amber-400 bg-amber-500/10 px-3 py-1 rounded-xl border border-amber-500/20" id="total-spend-badge">₹0 Total Spend</span>
+            </div>
+            <div id="bookings-container" class="space-y-4"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="mt-12 py-6 border-t border-slate-900 text-center text-xs text-slate-500 font-medium">PAVANCAB Goa - Dispatch Tower - All Rights Reserved</footer>
+
+  <script src="../api_client.js"></script>
+  <script src="../ui_helpers.js"></script>
+  <script>
+  let userData = null, bookingsData = [], tokensData = [], cleanPhone = '', userEmail = '';
+
+  function getParam(name) { return new URLSearchParams(window.location.search).get(name) || ''; }
+
+  function classifyStatus(status) {
+    const s = String(status || '').toUpperCase().trim();
+    if (s.includes('CANCEL') || s === 'REJECTED') return 'CANCELLED';
+    if (s === 'COMPLETED' || s === 'FINISHED') return 'COMPLETED';
+    if (s === 'IN_TRANSIT' || s === 'ON_TRIP' || s === 'ARRIVED') return 'IN_TRANSIT';
+    if (s === 'CONFIRMED' || s === 'ASSIGNED' || s === 'ACCEPTED' || s === 'DRIVER_ASSIGNED') return 'CONFIRMED';
+    return 'PENDING';
+  }
+
+  async function init() {
+    const me = await API.me();
+    if (!me || !me.user) { window.location.href = '../auth.php'; return; }
+
+    cleanPhone = getParam('phone').replace(/\D/g, '');
+    userEmail = getParam('email');
+    let params = '';
+    if (cleanPhone) params += 'phone=' + encodeURIComponent(cleanPhone);
+    if (userEmail) params += (params ? '&' : '') + 'email=' + encodeURIComponent(userEmail);
+
+    const detail = await API.dashUserDetail(params);
+    if (!detail || !detail.user) { document.getElementById('loading-state').innerHTML = '<p class="text-red-400 font-bold">User not found.</p>'; return; }
+
+    userData = detail.user;
+    bookingsData = detail.bookings || [];
+    tokensData = detail.fcm_tokens || [];
+
+    renderProfile();
+    renderBookings();
+    renderTokens();
+
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('app-content').classList.remove('hidden');
+    lucide.createIcons();
+  }
+
+  function renderProfile() {
+    const u = userData;
+    const name = u.name || 'Goa Customer';
+    const isLive = u.live_app_status === 'ONLINE_OPEN';
+    const phone = u.mobile || cleanPhone || '';
+    const email = u.email || userEmail || '';
+
+    document.title = name + ' - User Profile - PAVANCAB Goa';
+    document.getElementById('user-display-name').textContent = name;
+    document.getElementById('user-avatar').textContent = name[0] || '?';
+
+    const pill = document.getElementById('live-online-pill');
+    pill.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full border ' + (isLive ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse' : 'bg-slate-800 text-slate-400 border-slate-700');
+    pill.textContent = isLive ? 'App Opened (Online)' : 'App Closed (Offline)';
+
+    const dot = document.getElementById('user-avatar-dot');
+    dot.className = 'absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-slate-950 ' + (isLive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600');
+
+    document.getElementById('profile-name').textContent = name;
+    document.getElementById('profile-phone').textContent = '📞 ' + (phone || 'No Phone');
+    if (email) document.getElementById('profile-email').textContent = '✉️ ' + email;
+
+    let totalSpent = 0, completedCount = 0;
+    bookingsData.forEach(b => {
+      const c = classifyStatus(b.status);
+      if (c === 'COMPLETED') { completedCount++; totalSpent += parseFloat(b.total_fare || 0); }
+      else if (c === 'IN_TRANSIT' || c === 'CONFIRMED') totalSpent += parseFloat(b.total_fare || 0);
+    });
+
+    document.getElementById('stat-rides').textContent = bookingsData.length;
+    document.getElementById('stat-completed').textContent = completedCount;
+    document.getElementById('stat-spent').textContent = '₹' + Number(totalSpent).toLocaleString();
+    document.getElementById('booking-count').textContent = bookingsData.length;
+    document.getElementById('total-spend-badge').textContent = '₹' + Number(totalSpent).toLocaleString() + ' Total Spend';
+
+    const role = u.role || 'Passenger';
+    document.getElementById('profile-details').innerHTML = `
+      <div class="flex justify-between py-1 border-b border-slate-800"><span class="text-slate-400">Account Role:</span><span class="text-white font-bold uppercase">${role}</span></div>
+      <div class="flex justify-between py-1 border-b border-slate-800"><span class="text-slate-400">Last Active Time:</span><span class="text-amber-300 font-bold">${u.last_active_at || 'Never'}</span></div>
+      <div class="flex justify-between py-1 border-b border-slate-800"><span class="text-slate-400">Registered Devices:</span><span class="text-white font-bold">${tokensData.length} Active FCM Tokens</span></div>
+      <div class="flex justify-between py-1"><span class="text-slate-400">Device/Browser:</span><span class="text-slate-300 text-[11px] truncate max-w-[180px]">${UI.escapeHtml((u.device_info || 'Web App').substring(0, 25))}</span></div>`;
+
+    document.getElementById('dp-title').value = 'PAVANCAB Alert for ' + name;
+    document.getElementById('dp-body').value = 'Hello ' + name + ', your Goa cab is available with fixed rates and zero surge fees!';
+
+    let contactHtml = '';
+    if (phone) { contactHtml += `<a href="tel:${phone}" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-400 font-bold px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow"><i data-lucide="phone" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Call</span></a>`; contactHtml += `<a href="https://wa.me/${phone}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow"><i data-lucide="message-square" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">WhatsApp</span></a>`; }
+    document.getElementById('contact-actions').innerHTML = contactHtml;
+  }
+
+  function renderTokens() {
+    const el = document.getElementById('tokens-container');
+    document.getElementById('token-count').textContent = tokensData.length;
+    if (tokensData.length === 0) { el.innerHTML = 'No device push tokens registered yet.'; return; }
+    el.innerHTML = '<div class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar">' + tokensData.map((t, i) => `
+      <div class="p-3 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-1.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-bold text-white flex items-center gap-1.5"><span class="w-2 h-2 rounded-full ${t.is_online ? 'bg-emerald-400' : 'bg-slate-600'}"></span>Device #${i + 1}</span>
+          <span class="text-[10px] text-slate-400 font-mono">${(t.updated_at || '').substring(0, 16)}</span>
+        </div>
+        <div class="font-mono text-[10px] text-slate-400 truncate bg-slate-900 p-1.5 rounded-lg">${(t.fcm_token || '').substring(0, 30)}...${(t.fcm_token || '').slice(-15)}</div>
+        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1">
+          <span>${UI.escapeHtml((t.device_info || 'Browser Web Push').substring(0, 30))}</span>
+          <button type="button" onclick="pingSingleToken('${UI.escapeHtml(t.fcm_token || '')}')" class="text-amber-400 hover:text-amber-300 font-bold">Test Ping</button>
+        </div>
+      </div>`).join('') + '</div>';
+  }
+
+  function renderBookings() {
+    const el = document.getElementById('bookings-container');
+    if (bookingsData.length === 0) { el.innerHTML = '<div class="p-12 text-center border border-dashed border-slate-800 rounded-3xl space-y-2"><div class="text-3xl">🚖</div><h3 class="text-sm font-bold text-white">No Bookings Recorded</h3><p class="text-xs text-slate-400">This user has not booked any rides yet.</p></div>'; return; }
+
+    el.innerHTML = bookingsData.map(b => {
+      const cat = classifyStatus(b.status);
+      let badge = 'bg-slate-800 text-slate-300 border-slate-700';
+      if (cat === 'COMPLETED') badge = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+      else if (cat === 'CANCELLED') badge = 'bg-red-500/20 text-red-300 border-red-500/40';
+      else if (cat === 'IN_TRANSIT') badge = 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40';
+      else if (cat === 'CONFIRMED') badge = 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40';
+      else if (cat === 'PENDING') badge = 'bg-red-600 text-white font-black';
+
+      return `
+        <div class="p-4 sm:p-5 rounded-2xl bg-slate-950 border border-slate-800/80 space-y-3 transition hover:border-slate-700">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-mono font-black text-amber-400 text-sm">#${b.booking_ref || b.id}</span>
+                <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-lg border ${badge}">${b.status || ''}</span>
+              </div>
+              <p class="text-[10px] text-slate-400 mt-0.5">📅 ${b.pickup_date || ''} ${b.pickup_time || ''} · Created: ${(b.created_at || '').substring(0, 16)}</p>
+            </div>
+            <div class="text-right"><div class="text-base font-black text-amber-400 font-outfit">₹${Number(b.total_fare || 0).toLocaleString()}</div><div class="text-[10px] text-slate-400 uppercase font-bold">${b.cab_type || 'Sedan'}</div></div>
+          </div>
+          <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800/60 space-y-1.5 text-xs">
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0"></span><span class="text-slate-300 font-semibold truncate">${UI.escapeHtml(b.pickup_location || '')}</span></div>
+            <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-red-400 shrink-0"></span><span class="text-slate-300 font-semibold truncate">${UI.escapeHtml(b.drop_location || '')}</span></div>
+          </div>
+          <div class="flex items-center justify-between text-xs pt-1">
+            <div class="text-slate-400">${b.driver_name ? `Driver: <strong class="text-white">${UI.escapeHtml(b.driver_name)}</strong> (${UI.escapeHtml(b.vehicle_number || 'Goa Cab')})` : '<span class="text-slate-500 italic">No driver assigned</span>'}</div>
+            <div class="flex items-center gap-2">
+              ${b.user_rating ? `<span class="text-amber-400 font-bold text-xs">⭐ ${b.user_rating}/5</span>` : ''}
+              <a href="../receipt.html?booking_ref=${encodeURIComponent(b.booking_ref || '')}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-2.5 py-1 rounded-lg text-[10px] font-bold transition">View Slip</a>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function setPushPreset(preset) {
+    const t = document.getElementById('dp-title'), b = document.getElementById('dp-body'), u = document.getElementById('dp-url'), name = userData?.name || 'there';
+    if (preset === 'discount') { t.value = `Exclusive ₹200 OFF for ${name}!`; b.value = `Hello ${name}, book your Goa cab today and get ₹200 flat discount with coupon GOA200.`; u.value = '/app/index.html?coupon=GOA200'; }
+    else if (preset === 'reminder') { t.value = `Ready for your next Goa trip, ${name}?`; b.value = `Instant cab booking with verified Goa drivers, AC cabs, and 24/7 flight delay tracking.`; u.value = '/app/index.html'; }
+    else if (preset === 'vip') { t.value = `VIP Priority Dispatch for ${name}`; b.value = `Priority vehicle dispatched on demand with zero wait time.`; u.value = '/app/rides.html'; }
+  }
+
+  async function handleSendDirectPush(e) {
+    e.preventDefault();
+    const title = document.getElementById('dp-title').value.trim();
+    const body = document.getElementById('dp-body').value.trim();
+    const url = document.getElementById('dp-url').value.trim();
+    const resultBox = document.getElementById('dp-result-box');
+    const btn = document.getElementById('dp-submit-btn');
+    btn.disabled = true; btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Sending via FCM v1...</span>';
+    resultBox.innerHTML = '<span class="text-amber-400 font-bold">Contacting Google FCM Gateway...</span>';
+    try {
+      const data = await API.dashSendPush({ target_phone: cleanPhone, target_email: userEmail, title, body, click_action: url });
+      if (data.success) resultBox.innerHTML = `<div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 font-black">${data.message}</div>`;
+      else resultBox.innerHTML = `<div class="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 font-bold">${data.error || 'Failed'}</div>`;
+    } catch(err) { resultBox.innerHTML = '<div class="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 font-bold">Network Error</div>'; }
+    finally { btn.disabled = false; btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i><span>Dispatch Custom Push Now</span>'; lucide.createIcons(); }
+  }
+
+  async function pingSingleToken(token) {
+    if (!confirm('Send test FCM ping to this device?')) return;
+    try {
+      const data = await API.dashSendPush({ target_token: token, title: 'PAVANCAB Device Test Ping', body: 'Device connected to Pavan Cab real-time push service!', click_action: '/app/index.html' });
+      alert(data.success ? 'Ping delivered!' : 'Error: ' + (data.error || 'Failed'));
+    } catch(e) { alert('Network error'); }
+  }
+
+  init();
+  </script>
+</body>
+</html>

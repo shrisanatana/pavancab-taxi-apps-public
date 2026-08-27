@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fleet Management - PAVANCAB Goa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif}.font-outfit{font-family:'Outfit',sans-serif}
+    .uber-card{background:linear-gradient(145deg,rgba(15,23,42,.85),rgba(2,6,23,.95));backdrop-filter:blur(12px)}
+    .gradient-btn-gold{background:linear-gradient(135deg,#F59E0B 0%,#D97706 100%);transition:all .2s ease}
+    .gradient-btn-gold:hover{box-shadow:0 0 25px rgba(245,158,11,.4);transform:translateY(-1px)}
+    .wa-phone-wrap{position:relative;display:flex;align-items:stretch;border-radius:12px;overflow:hidden;border:1px solid #334155;background:#0f172a}
+    .wa-phone-wrap:focus-within{border-color:#f59e0b}
+    .wa-cc-btn{display:flex;align-items:center;gap:6px;padding:0 12px;background:#1e293b;border-right:1px solid #334155;cursor:pointer;user-select:none;min-width:80px;white-space:nowrap}
+    .wa-cc-btn:hover{background:#334155}
+    .wa-cc-btn .flag{font-size:16px;line-height:1}.wa-cc-btn .code{font-size:12px;font-weight:700;color:#f8fafc}.wa-cc-btn .chevron{font-size:8px;color:#94a3b8;margin-left:2px}
+    .wa-phone-input{flex:1;border:none;outline:none;background:transparent;padding:10px 14px;font-size:13px;font-weight:700;color:#f8fafc;letter-spacing:.5px;font-family:inherit}
+    .wa-phone-input::placeholder{color:#64748b;font-weight:500}
+    .wa-country-dropdown{position:absolute;top:calc(100% + 4px);left:0;right:0;max-height:280px;background:#1e293b;border:1px solid #334155;border-radius:12px;z-index:100;overflow:hidden;display:none;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+    .wa-country-dropdown.open{display:block}
+    .wa-country-search{width:100%;padding:10px 14px;border:none;border-bottom:1px solid #334155;background:#0f172a;color:#f8fafc;font-size:12px;font-weight:600;outline:none}
+    .wa-country-list{max-height:220px;overflow-y:auto}
+    .wa-country-list::-webkit-scrollbar{width:4px}.wa-country-list::-webkit-scrollbar-thumb{background:#475569;border-radius:4px}
+    .wa-country-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:600;color:#e2e8f0;transition:background .1s}
+    .wa-country-item:hover{background:#334155}.wa-country-item.active{background:#f59e0b;color:#0f172a}
+    .wa-country-item .cflag{font-size:18px;line-height:1;width:24px;text-align:center}.wa-country-item .cname{flex:1}.wa-country-item .ccode{color:#94a3b8;font-size:11px;font-weight:700}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-amber-400 selection:text-slate-950">
+
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="./index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/25 group-hover:scale-105 transition-transform">🚖</div>
+          <div>
+            <div class="flex items-center gap-1.5"><span class="font-extrabold text-white text-lg tracking-tight font-outfit">PAVANCAB</span><span class="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1.5 py-0.5 rounded font-black tracking-wider uppercase">TOWER</span></div>
+            <p class="text-[10px] text-slate-400 font-semibold tracking-wide flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live Goa Dispatch Center</p>
+          </div>
+        </a>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="./fleet.html" class="bg-slate-900 hover:bg-slate-800 border border-amber-400 text-amber-300 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="users" class="w-3.5 h-3.5 text-amber-400"></i><span class="hidden sm:inline">Fleet</span></a>
+        <a href="./users.html" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="users-round" class="w-3.5 h-3.5 text-amber-400"></i><span class="hidden sm:inline">Users</span></a>
+        <a href="../auth.php?action=logout" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-black px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Logout</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow space-y-6 w-full">
+    <div id="loading-state" class="flex items-center justify-center py-20">
+      <div class="text-center space-y-3">
+        <div class="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="text-sm text-slate-400 font-bold">Loading Fleet Data...</p>
+      </div>
+    </div>
+
+    <div id="app-content" class="hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white font-outfit uppercase tracking-tight flex items-center gap-2">
+            <span>Goa Driver Partners Roster</span>
+            <span class="text-xs bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2.5 py-0.5 rounded-full font-black" id="driver-count-badge">0 Drivers</span>
+          </h2>
+          <p class="text-xs text-slate-400">Manage fleet partners, register new drivers, toggle availability.</p>
+        </div>
+        <button onclick="document.getElementById('add-driver-section').classList.toggle('hidden')" class="gradient-btn-gold text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl uppercase flex items-center gap-1.5 shadow-lg"><i data-lucide="user-plus" class="w-4 h-4"></i> + Register New Driver</button>
+      </div>
+
+      <!-- ADD DRIVER FORM (hidden by default) -->
+      <div id="add-driver-section" class="hidden uber-card p-6 rounded-3xl border border-amber-500/30 bg-amber-950/10 space-y-4">
+        <h3 class="text-base font-black text-white uppercase font-outfit">Register New Driver Partner</h3>
+        <form onsubmit="handleAddDriver(event)" class="space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div><label class="block text-xs font-black text-slate-300 uppercase mb-1">Driver Full Name *</label><input type="text" id="nd_name" required placeholder="e.g. Ramesh Naik" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-amber-400"></div>
+            <div>
+              <label class="block text-xs font-black text-slate-300 uppercase mb-1">Phone Number *</label>
+              <div class="wa-phone-wrap" id="wa-nd">
+                <div class="wa-cc-btn" onclick="toggleWaDropdown('nd')"><span class="flag">🇮🇳</span><span class="code">+91</span><span class="chevron">▼</span></div>
+                <input type="tel" id="nd_phone" required placeholder="phone number" maxlength="15" class="wa-phone-input">
+                <input type="hidden" id="nd_cc" value="91">
+                <div class="wa-country-dropdown" id="wa-dd-nd"><input type="text" class="wa-country-search" placeholder="Search country..." oninput="filterWaCountries('nd',this.value)"><div class="wa-country-list" id="wa-list-nd"></div></div>
+              </div>
+            </div>
+            <div><label class="block text-xs font-black text-slate-300 uppercase mb-1">Plate Number *</label><input type="text" id="nd_plate" required placeholder="GA-03-T-1234" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-amber-400 uppercase font-mono"></div>
+            <div><label class="block text-xs font-black text-slate-300 uppercase mb-1">Car Model</label><input type="text" id="nd_model" placeholder="e.g. Innova / Dzire" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-amber-400"></div>
+          </div>
+          <div id="nd-msg" class="text-xs font-bold text-center"></div>
+          <button type="submit" class="w-full gradient-btn-gold text-slate-950 font-black text-xs py-3 rounded-xl uppercase flex items-center justify-center gap-1.5 shadow-lg"><i data-lucide="save" class="w-4 h-4"></i> Save Driver to Fleet</button>
+        </form>
+      </div>
+
+      <!-- FLEET GRID -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="fleet-grid-container"></div>
+    </div>
+  </main>
+
+  <footer class="mt-12 py-6 border-t border-slate-900 text-center text-xs text-slate-500 font-medium">PAVANCAB Goa - Dispatch Tower - All Rights Reserved</footer>
+
+  <script src="../api_client.js"></script>
+  <script src="../ui_helpers.js"></script>
+  <script>
+  let driversData = [];
+
+  const WA_COUNTRIES = [
+    {c:'IN',n:'India',d:'91',f:'🇮🇳'},{c:'AE',n:'UAE',d:'971',f:'🇦🇪'},{c:'US',n:'United States',d:'1',f:'🇺🇸'},
+    {c:'GB',n:'United Kingdom',d:'44',f:'🇬🇧'},{c:'AU',n:'Australia',d:'61',f:'🇦🇺'},{c:'NP',n:'Nepal',d:'977',f:'🇳🇵'},
+    {c:'BD',n:'Bangladesh',d:'880',f:'🇧🇩'},{c:'LK',n:'Sri Lanka',d:'94',f:'🇱🇰'},{c:'SA',n:'Saudi Arabia',d:'966',f:'🇸🇦'},
+    {c:'QA',n:'Qatar',d:'974',f:'🇶🇦'},{c:'KW',n:'Kuwait',d:'965',f:'🇰🇼'},{c:'OM',n:'Oman',d:'968',f:'🇴🇲'},
+    {c:'BH',n:'Bahrain',d:'973',f:'🇧🇭'},{c:'DE',n:'Germany',d:'49',f:'🇩🇪'},{c:'FR',n:'France',d:'33',f:'🇫🇷'},
+    {c:'IT',n:'Italy',d:'39',f:'🇮🇹'},{c:'ES',n:'Spain',d:'34',f:'🇪🇸'},{c:'CA',n:'Canada',d:'1',f:'🇨🇦'},
+    {c:'SG',n:'Singapore',d:'65',f:'🇸🇬'},{c:'MY',n:'Malaysia',d:'60',f:'🇲🇾'},{c:'TH',n:'Thailand',d:'66',f:'🇹🇭'}
+  ];
+
+  function initWaPicker(prefix) {
+    const list = document.getElementById('wa-list-' + prefix);
+    if (!list) return;
+    list.innerHTML = WA_COUNTRIES.map(c =>
+      `<div class="wa-country-item" data-cc="${c.d}" data-flag="${c.f}" data-name="${c.n}" onclick="selectWaCountry('${prefix}','${c.d}','${c.f}','${c.n}')"><span class="cflag">${c.f}</span><span class="cname">${c.n}</span><span class="ccode">+${c.d}</span></div>`
+    ).join('');
+  }
+
+  function toggleWaDropdown(prefix) {
+    const dd = document.getElementById('wa-dd-' + prefix);
+    const isOpen = dd.classList.contains('open');
+    document.querySelectorAll('.wa-country-dropdown').forEach(d => d.classList.remove('open'));
+    if (!isOpen) { dd.classList.add('open'); dd.querySelector('.wa-country-search').value = ''; filterWaCountries(prefix, ''); setTimeout(() => dd.querySelector('.wa-country-search').focus(), 50); }
+  }
+
+  function selectWaCountry(prefix, code, flag, name) {
+    const wrap = document.getElementById('wa-' + prefix);
+    wrap.querySelector('.flag').textContent = flag;
+    wrap.querySelector('.code').textContent = '+' + code;
+    wrap.querySelector('input[type="hidden"]').value = code;
+    document.getElementById('wa-dd-' + prefix).classList.remove('open');
+    wrap.querySelector('.wa-phone-input').focus();
+  }
+
+  function filterWaCountries(prefix, q) {
+    const list = document.getElementById('wa-list-' + prefix);
+    if (!list) return;
+    const items = list.querySelectorAll('.wa-country-item');
+    const lower = q.toLowerCase();
+    items.forEach(item => { const name = item.dataset.name.toLowerCase(); const cc = item.dataset.cc; item.style.display = (name.includes(lower) || cc.includes(lower)) ? '' : 'none'; });
+  }
+
+  function fullPhone(prefix, phoneId) {
+    const cc = (document.getElementById(prefix + '_cc')?.value || '91').replace(/\D/g, '');
+    const raw = (document.getElementById(phoneId)?.value || '').replace(/\D/g, '');
+    if (!raw) return '';
+    if (raw.startsWith(cc) && raw.length > cc.length) return '+' + raw;
+    return '+' + cc + raw;
+  }
+
+  document.addEventListener('click', e => { if (!e.target.closest('.wa-phone-wrap')) document.querySelectorAll('.wa-country-dropdown').forEach(d => d.classList.remove('open')); });
+
+  function renderDriverCard(d) {
+    const st = String(d.status || 'available').toLowerCase();
+    const isAvailable = st === 'available';
+    const isOnTrip = st === 'on_trip';
+    const phone = d.phone || '';
+    const clean = phone.replace(/\D/g, '');
+    let statusClass = 'bg-slate-800 text-slate-400 border-slate-700';
+    if (isAvailable) statusClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+    else if (isOnTrip) statusClass = 'bg-yellow-500/20 text-yellow-300 border-yellow-500/40 animate-pulse';
+
+    return `<div class="uber-card p-5 rounded-3xl border border-slate-800 space-y-4 shadow-xl hover:border-amber-400/40 transition" data-driver-id="${d.id}">
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-black">👨‍✈️</div>
+          <div>
+            <h3 class="font-extrabold text-white text-base leading-snug">${UI.escapeHtml(d.name || '')}</h3>
+            <span class="text-xs text-amber-300 font-mono font-bold">🚖 ${UI.escapeHtml(d.plate_number || 'GA-03-T-1234')}</span>
+            <span class="text-slate-400 text-[11px] block">${UI.escapeHtml(d.car_model || 'Sedan / Hatchback')}</span>
+          </div>
+        </div>
+        <button onclick="toggleDriverStatus(${d.id}, '${isAvailable ? 'inactive' : 'available'}')" class="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase border transition ${statusClass}">${String(d.status || 'available').toUpperCase()}</button>
+      </div>
+      <div class="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/80 text-xs space-y-1.5">
+        <div class="flex justify-between items-center"><span class="text-slate-400 font-bold">Direct Phone:</span><a href="tel:${phone}" class="text-amber-400 font-bold hover:underline">📞 ${UI.escapeHtml(phone)}</a></div>
+        <div class="flex justify-between items-center"><span class="text-slate-400 font-bold">WhatsApp:</span><a href="https://wa.me/${clean}" target="_blank" class="text-emerald-400 font-bold hover:underline flex items-center gap-1"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> Open Chat</a></div>
+      </div>
+      <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+        <a href="tel:${phone}" class="flex-1 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-bold py-2 rounded-xl text-center flex items-center justify-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5 text-amber-400"></i> Call</a>
+        <a href="https://wa.me/${clean}" target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-black py-2 rounded-xl text-center flex items-center justify-center gap-1 shadow"><i data-lucide="send" class="w-3.5 h-3.5"></i> WhatsApp</a>
+        <button onclick="deleteDriver(${d.id})" class="p-2 text-slate-500 hover:text-red-400 rounded-xl transition" title="Delete Driver"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </div>
+    </div>`;
+  }
+
+  function renderFleet() {
+    const grid = document.getElementById('fleet-grid-container');
+    document.getElementById('driver-count-badge').textContent = driversData.length + ' Drivers';
+    if (driversData.length === 0) {
+      grid.innerHTML = `<div class="col-span-full uber-card p-12 rounded-3xl text-center text-slate-400 border border-slate-800 space-y-3"><p class="text-base font-bold text-white">No fleet drivers registered yet.</p><p class="text-xs text-slate-500">Click '+ Register New Driver' above to add your first driver partner.</p></div>`;
+    } else {
+      grid.innerHTML = driversData.map(renderDriverCard).join('');
+    }
+    lucide.createIcons();
+  }
+
+  async function init() {
+    const me = await API.me();
+    if (!me || !me.user) { window.location.href = '../auth.php'; return; }
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('app-content').classList.remove('hidden');
+    initWaPicker('nd');
+    await loadDrivers();
+  }
+
+  async function loadDrivers() {
+    const data = await API.dashDrivers();
+    if (!Array.isArray(data)) return;
+    driversData = data;
+    renderFleet();
+  }
+
+  async function handleAddDriver(e) {
+    e.preventDefault();
+    const msg = document.getElementById('nd-msg');
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.innerHTML = 'Saving...';
+    try {
+      const data = await API.dashAddDriver({
+        name: document.getElementById('nd_name').value,
+        phone: fullPhone('nd', 'nd_phone'),
+        plate_number: document.getElementById('nd_plate').value,
+        car_model: document.getElementById('nd_model').value
+      });
+      if (data.success) {
+        msg.innerHTML = '<span class="text-emerald-400 font-bold">✓ Driver registered!</span>';
+        document.getElementById('add-driver-section').classList.add('hidden');
+        e.target.reset();
+        initWaPicker('nd');
+        await loadDrivers();
+      } else { msg.innerHTML = `<span class="text-red-400 font-bold">${data.error || 'Failed'}</span>`; }
+    } catch(e) { msg.innerHTML = '<span class="text-red-400 font-bold">Network error</span>'; }
+    finally { btn.disabled = false; btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Driver to Fleet'; lucide.createIcons(); }
+  }
+
+  async function toggleDriverStatus(driverId, newStatus) {
+    try {
+      const data = await API.dashToggleDriver(driverId);
+      if (data.success) await loadDrivers();
+      else alert(data.error || 'Failed');
+    } catch(e) { alert('Network error'); }
+  }
+
+  async function deleteDriver(driverId) {
+    if (!confirm('Delete this driver from fleet?')) return;
+    try {
+      const data = await API.dashDeleteDriver(driverId);
+      if (data.success) await loadDrivers();
+      else alert(data.error || 'Failed');
+    } catch(e) { alert('Network error'); }
+  }
+
+  init();
+  </script>
+</body>
+</html>

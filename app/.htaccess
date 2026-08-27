@@ -1,0 +1,67 @@
+DirectoryIndex index.html index.php
+Options -Indexes
+RewriteEngine On
+RewriteBase /app/
+
+# API endpoints - serve PHP directly
+RewriteRule ^api/ - [L]
+RewriteRule ^api\.php$ - [L]
+RewriteRule ^api_dashboard\.php$ - [L]
+RewriteRule ^api_rides\.php$ - [L]
+RewriteRule ^auth\.php$ - [L]
+RewriteRule ^bookings\.php$ - [L]
+RewriteRule ^pickups\.php$ - [L]
+RewriteRule ^drops\.php$ - [L]
+RewriteRule ^hourly\.php$ - [L]
+RewriteRule ^tours\.php$ - [L]
+RewriteRule ^db\.php$ - [L]
+RewriteRule ^fcm_v1\.php$ - [L]
+RewriteRule ^cancel_ride\.php$ - [L]
+RewriteRule ^admin\.php$ - [L]
+RewriteRule ^each-min-cron\.php$ - [L]
+RewriteRule ^cron\.php$ - [L]
+
+# User pages: redirect PHP to HTML
+RewriteRule ^rides\.php$ rides.html [R=301,L]
+RewriteRule ^index\.php$ index.html [R=301,L]
+
+# Dashboard pages: redirect PHP to HTML
+RewriteRule ^dashboard/pending\.php$ dashboard/index.html?filter=PENDING [R=301,L]
+RewriteRule ^dashboard/assigned\.php$ dashboard/index.html?filter=CONFIRMED [R=301,L]
+RewriteRule ^dashboard/intransit\.php$ dashboard/index.html?filter=IN_TRANSIT [R=301,L]
+RewriteRule ^dashboard/completed\.php$ dashboard/index.html?filter=COMPLETED [R=301,L]
+RewriteRule ^dashboard/cancelled\.php$ dashboard/index.html?filter=CANCELLED [R=301,L]
+RewriteRule ^dashboard/users\.php$ dashboard/users.html [R=301,L]
+RewriteRule ^dashboard/user_detail\.php$ dashboard/user_detail.html [R=301,L]
+RewriteRule ^dashboard/team\.php$ dashboard/team.html [R=301,L]
+RewriteRule ^dashboard/fleet\.php$ dashboard/fleet.html [R=301,L]
+RewriteRule ^dashboard/reports\.php$ dashboard/reports.html [R=301,L]
+RewriteRule ^dashboard/index\.php$ dashboard/index.html [R=301,L]
+RewriteRule ^dashboard\.php$ dashboard/index.html [R=301,L]
+
+# SPA fallback
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /app/index.html [L]
+
+<FilesMatch "\.(txt|log)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "\.(php|html|htm|js|css)$">
+    FileETag None
+    <IfModule mod_headers.c>
+        Header unset ETag
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+    </IfModule>
+</FilesMatch>
+
+<Files "api_dashboard.php">
+    <IfModule mod_headers.c>
+        Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0, private"
+        Header set Pragma "no-cache"
+        Header unset ETag
+    </IfModule>
+</Files>

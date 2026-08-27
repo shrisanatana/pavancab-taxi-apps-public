@@ -1,0 +1,39 @@
+﻿{
+  "project_info": {
+    "project_number": "1064014558872",
+    "project_id": "pavancab-4a1daa",
+    "storage_bucket": "pavancab-4a1daa.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064014558872:android:c37016b81783a52f0ac2ed",
+        "android_client_info": {
+          "package_name": "com.pavancab.niranjan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064014558872-maf1lejmc0inbgbfrl8vg2a3igj6i0hh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuiq8cejRitoRVF0EscWHg9ocImJLpE4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064014558872-maf1lejmc0inbgbfrl8vg2a3igj6i0hh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

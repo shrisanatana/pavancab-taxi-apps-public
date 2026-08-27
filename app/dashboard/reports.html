@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ride Reports Desk - PAVANCAB Goa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif}.font-outfit{font-family:'Outfit',sans-serif}
+    .uber-card{background:linear-gradient(145deg,rgba(15,23,42,.85),rgba(2,6,23,.95));backdrop-filter:blur(12px)}
+    .gradient-btn-gold{background:linear-gradient(135deg,#F59E0B 0%,#D97706 100%);transition:all .2s ease}
+    .gradient-btn-gold:hover{box-shadow:0 0 25px rgba(245,158,11,.4);transform:translateY(-1px)}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-amber-400 selection:text-slate-950">
+
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="./index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/25 group-hover:scale-105 transition-transform">🚖</div>
+          <div>
+            <div class="flex items-center gap-1.5"><span class="font-extrabold text-white text-lg tracking-tight font-outfit">PAVANCAB</span><span class="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1.5 py-0.5 rounded font-black tracking-wider uppercase">TOWER</span></div>
+            <p class="text-[10px] text-slate-400 font-semibold tracking-wide flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live Goa Dispatch Center</p>
+          </div>
+        </a>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="./reports.html" class="bg-slate-900 hover:bg-slate-800 border border-amber-400 text-amber-300 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i><span class="hidden sm:inline">Reports Desk</span></a>
+        <a href="./users.html" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="users-round" class="w-3.5 h-3.5 text-amber-400"></i><span class="hidden sm:inline">Users</span></a>
+        <a href="../auth.php?action=logout" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-black px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Logout</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow space-y-6 w-full">
+    <div id="loading-state" class="flex items-center justify-center py-20">
+      <div class="text-center space-y-3">
+        <div class="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="text-sm text-slate-400 font-bold">Loading Reports...</p>
+      </div>
+    </div>
+
+    <div id="app-content" class="hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white font-outfit uppercase tracking-tight flex items-center gap-2">
+            <span>Customer Ride Reports Desk</span>
+            <span class="text-xs bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2.5 py-0.5 rounded-full font-black" id="report-count-badge">0 Total</span>
+          </h2>
+          <p class="text-xs text-slate-400">Resolve passenger feedback, lost items, driver complaints, and fare disputes.</p>
+        </div>
+      </div>
+
+      <div class="space-y-4" id="reports-feed-container"></div>
+    </div>
+  </main>
+
+  <footer class="mt-12 py-6 border-t border-slate-900 text-center text-xs text-slate-500 font-medium">PAVANCAB Goa - Dispatch Tower - All Rights Reserved</footer>
+
+  <script src="../api_client.js"></script>
+  <script src="../ui_helpers.js"></script>
+  <script>
+  let reportsData = [];
+
+  async function init() {
+    const me = await API.me();
+    if (!me || !me.user) { window.location.href = '../auth.php'; return; }
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('app-content').classList.remove('hidden');
+    await loadReports();
+  }
+
+  async function loadReports() {
+    const data = await API.dashReports();
+    if (!Array.isArray(data)) return;
+    reportsData = data;
+    renderReports();
+  }
+
+  function renderReports() {
+    const container = document.getElementById('reports-feed-container');
+    document.getElementById('report-count-badge').textContent = reportsData.length + ' Total';
+
+    if (reportsData.length === 0) {
+      container.innerHTML = `<div class="uber-card p-12 rounded-3xl text-center text-slate-400 border border-slate-800 space-y-2">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-xl">✓</div>
+        <p class="text-base font-bold text-white">All Clear · No Open Reports</p>
+        <p class="text-xs text-slate-500">Customer feedback will stream here from the tracking page.</p>
+      </div>`;
+      return;
+    }
+
+    container.innerHTML = reportsData.map(rep => {
+      const st = String(rep.status || 'PENDING').toUpperCase();
+      const isResolved = st === 'RESOLVED';
+      const isInvestigating = st === 'INVESTIGATING';
+
+      let statusBadgeCls = 'bg-amber-400/20 text-amber-300 border-amber-400/40 animate-pulse';
+      if (isResolved) statusBadgeCls = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+      else if (isInvestigating) statusBadgeCls = 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 animate-pulse';
+
+      const customerPhone = (rep.customer_phone || '').replace(/\D/g, '');
+      const driverPhone = (rep.driver_phone || '').replace(/\D/g, '');
+
+      return `<div class="uber-card p-5 sm:p-6 rounded-3xl border ${isResolved ? 'border-emerald-500/30 opacity-75' : 'border-amber-500/40'} space-y-4 shadow-xl" id="report-card-${rep.id}" data-report-id="${rep.id}">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div>
+            <span class="text-sm font-black text-white font-outfit uppercase">#GTA-REP-${rep.id} (Booking #${UI.escapeHtml(rep.booking_ref || rep.booking_id || '')})</span>
+            <span class="text-[10px] bg-slate-800 text-amber-300 font-bold px-2 py-0.5 rounded-md ml-1.5 uppercase">${UI.escapeHtml(rep.issue_type || rep.issue_category || 'Issue')}</span>
+            <span class="text-[10px] text-slate-500 ml-2">${UI.escapeHtml(rep.created_at || '')}</span>
+          </div>
+          <span id="report-status-badge-${rep.id}" class="text-[10px] font-black uppercase px-2.5 py-1 rounded-xl border ${statusBadgeCls}">${st}</span>
+        </div>
+
+        <div class="text-xs text-slate-300 bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800 space-y-1.5">
+          <div class="font-bold text-amber-300 uppercase text-[10px]">Passenger Feedback / Report:</div>
+          <p class="leading-relaxed">${UI.escapeHtml(rep.description || '')}</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-900/40 p-3 rounded-xl border border-slate-800">
+          <div>
+            <span class="text-slate-400 font-bold">Passenger:</span>
+            <span class="text-white font-bold ml-1">${UI.escapeHtml(rep.customer_name || 'N/A')}</span>
+            ${customerPhone ? `<a href="tel:${customerPhone}" class="text-amber-400 hover:underline ml-1">(📞 ${UI.escapeHtml(rep.customer_phone || '')})</a>` : ''}
+          </div>
+          <div>
+            <span class="text-slate-400 font-bold">Driver:</span>
+            <span class="text-white font-bold ml-1">${UI.escapeHtml(rep.driver_name || 'Unassigned')}</span>
+            ${driverPhone ? `<a href="tel:${driverPhone}" class="text-amber-400 hover:underline ml-1">(📞 ${UI.escapeHtml(rep.driver_phone || '')})</a>` : ''}
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800">
+          <div class="flex items-center gap-2">
+            ${customerPhone ? `<a href="https://wa.me/${customerPhone}" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs px-3.5 py-1.5 rounded-xl flex items-center gap-1 shadow"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> WhatsApp Passenger</a>` : ''}
+            ${driverPhone ? `<a href="https://wa.me/${driverPhone}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl flex items-center gap-1"><i data-lucide="send" class="w-3.5 h-3.5 text-amber-400"></i> WhatsApp Driver</a>` : ''}
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-slate-400 font-bold uppercase">Status:</span>
+            <select onchange="updateReportStatus(${rep.id}, this.value)" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl focus:outline-none focus:border-amber-400">
+              <option value="PENDING" ${st === 'PENDING' ? 'selected' : ''}>PENDING</option>
+              <option value="INVESTIGATING" ${st === 'INVESTIGATING' ? 'selected' : ''}>INVESTIGATING</option>
+              <option value="RESOLVED" ${st === 'RESOLVED' ? 'selected' : ''}>RESOLVED</option>
+            </select>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    lucide.createIcons();
+  }
+
+  async function updateReportStatus(reportId, newStatus) {
+    try {
+      const data = await API.dashUpdateReport({ report_id: reportId, status: newStatus });
+      if (data.success) {
+        const badge = document.getElementById('report-status-badge-' + reportId);
+        const card = document.getElementById('report-card-' + reportId);
+        if (badge) {
+          badge.innerText = newStatus;
+          let cls = 'text-[10px] font-black uppercase px-2.5 py-1 rounded-xl border ';
+          if (newStatus === 'RESOLVED') cls += 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+          else if (newStatus === 'INVESTIGATING') cls += 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40 animate-pulse';
+          else cls += 'bg-amber-400/20 text-amber-300 border-amber-400/40 animate-pulse';
+          badge.className = cls;
+        }
+        if (card) {
+          card.className = card.className.replace(/border-emerald-500\/30|border-amber-500\/40|opacity-75/g, '').trim() + (newStatus === 'RESOLVED' ? ' border-emerald-500/30 opacity-75' : ' border-amber-500/40');
+        }
+        // Update in-memory data
+        const rep = reportsData.find(r => r.id === reportId);
+        if (rep) rep.status = newStatus;
+      } else { alert(data.error || 'Failed to update'); }
+    } catch(e) { alert('Network error'); }
+  }
+
+  init();
+  </script>
+</body>
+</html>

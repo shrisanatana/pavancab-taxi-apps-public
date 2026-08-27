@@ -1,0 +1,70 @@
+# ---------- Environment / credentials (NEVER commit) ----------
+.env
+.env.*
+!.env.example
+*.local
+
+# ---------- Signing / keystores (NEVER commit) ----------
+*.jks
+*.keystore
+keystore.properties
+*.p12
+*.pem
+*.key
+
+# ---------- Firebase server keys (NEVER commit) ----------
+*-service-account.json
+service-account.json
+
+# ---------- Android build outputs & local state ----------
+.gradle/
+build/
+.kotlin/
+local.properties
+*.apk
+*.aab
+captures/
+.cxx/
+*.iml
+.idea/
+
+# ---------- Deployment / FTP / cookie credentials ----------
+deploy_pw.txt
+deploy.txt
+deploy_auth.txt
+deploy_php.txt
+deploy.ps1
+*cookie*.txt
+*winscp*.txt
+*ftp_upload*.txt
+whatsappapi.txt
+whatsapp_log.txt
+payload.json
+
+# ---------- Private admin guide (contains real passwords) ----------
+ADMIN_SETUP_GUIDE.txt
+
+# ---------- Temp / diagnostic / scratch files ----------
+-w
+check_*.php
+check_*.js
+check_*.html
+server_*.php
+server_*.txt
+fix_script.py
+test_*.php
+test_*.html
+debug_*.php
+zz_diag_*.php
+htaccess_check.txt
+simple.php
+ui*.xml
+ui*.txt
+uidump.txt
+screen*.png
+screenshot_*.png
+plan.txt
+
+# ---------- Logs ----------
+*.log
+logs/

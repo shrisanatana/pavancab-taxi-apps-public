@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Staff Management - PAVANCAB Goa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif}.font-outfit{font-family:'Outfit',sans-serif}
+    .uber-card{background:linear-gradient(145deg,rgba(15,23,42,.85),rgba(2,6,23,.95));backdrop-filter:blur(12px)}
+    .gradient-btn-gold{background:linear-gradient(135deg,#F59E0B 0%,#D97706 100%);transition:all .2s ease}
+    .gradient-btn-gold:hover{box-shadow:0 0 25px rgba(245,158,11,.4);transform:translateY(-1px)}
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-amber-400 selection:text-slate-950">
+
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <a href="./index.html" class="flex items-center gap-2.5 group">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-300 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-amber-500/25 group-hover:scale-105 transition-transform">ðŸš–</div>
+          <div>
+            <div class="flex items-center gap-1.5"><span class="font-extrabold text-white text-lg tracking-tight font-outfit">PAVANCAB</span><span class="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-1.5 py-0.5 rounded font-black tracking-wider uppercase">TOWER</span></div>
+            <p class="text-[10px] text-slate-400 font-semibold tracking-wide flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Live Goa Dispatch Center</p>
+          </div>
+        </a>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="./team.html" class="bg-slate-900 hover:bg-slate-800 border border-amber-400 text-amber-300 text-xs font-bold px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-indigo-400"></i><span class="hidden md:inline">Team</span></a>
+        <a href="../auth.php?action=logout" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-black px-3 py-2 rounded-xl transition flex items-center gap-1.5 shadow"><i data-lucide="log-out" class="w-3.5 h-3.5"></i><span class="hidden sm:inline">Logout</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow space-y-6 w-full">
+    <div id="loading-state" class="flex items-center justify-center py-20">
+      <div class="text-center space-y-3">
+        <div class="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p class="text-sm text-slate-400 font-bold">Loading Team Data...</p>
+      </div>
+    </div>
+
+    <div id="app-content" class="hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white font-outfit uppercase tracking-tight flex items-center gap-2">
+            <span>Team Dispatch Staff Management</span>
+            <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 px-2.5 py-0.5 rounded-full font-black">Super Admin Access</span>
+          </h2>
+          <p class="text-xs text-slate-400">Add dispatch staff to manage bookings and send OTPs.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- ADD FORM -->
+        <div class="uber-card p-6 rounded-3xl border border-slate-800 space-y-4 shadow-xl h-fit">
+          <div class="space-y-1"><h3 class="text-base font-black text-white uppercase font-outfit">+ Add Dispatch Staff</h3><p class="text-xs text-slate-400">Enter team member credentials to grant dashboard dispatch rights.</p></div>
+          <form onsubmit="handleAddTeamMember(event)" class="space-y-3">
+            <div><label class="block text-xs font-black text-slate-300 uppercase mb-1">Staff Full Name *</label><input type="text" id="new_team_name" required placeholder="e.g. Rahul Sharma" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-amber-400"></div>
+            <div><label class="block text-xs font-black text-slate-300 uppercase mb-1">WhatsApp Mobile Number *</label><input type="tel" id="new_team_phone" required placeholder="e.g. 9822123456" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-amber-400 font-mono"></div>
+            <div><label class="block text-xs font-black text-slate-300 uppercase mb-1">Email Address (Optional)</label><input type="email" id="new_team_email" placeholder="staff@pavancab.com" class="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs font-bold text-white focus:outline-none focus:border-amber-400"></div>
+            <div id="team-add-msg" class="text-xs font-bold text-center"></div>
+            <button type="submit" class="w-full gradient-btn-gold text-slate-950 font-black text-xs py-3 rounded-xl uppercase flex items-center justify-center gap-1.5 shadow-lg"><i data-lucide="user-check" class="w-4 h-4"></i> Grant Dispatch Access</button>
+          </form>
+        </div>
+
+        <!-- TEAM LIST -->
+        <div class="lg:col-span-2 space-y-3">
+          <h3 class="text-sm font-black text-slate-300 uppercase tracking-wide">Active Dispatchers (<span id="team-count">0</span>)</h3>
+          <div class="space-y-2.5" id="team-list-container">
+            <!-- Super Admin Tile -->
+            <div class="uber-card p-4 rounded-2xl border border-amber-400/40 bg-amber-500/5 flex flex-wrap justify-between items-center gap-2 text-xs">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center font-black">ðŸ‘‘</div>
+                <div>
+                  <div class="flex items-center gap-2"><span class="font-black text-white text-sm">Super Admin</span><span class="text-[10px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded font-black uppercase">Root Owner</span></div>
+                  <span class="text-slate-400">ðŸ“ž +91 8199000000</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="mt-12 py-6 border-t border-slate-900 text-center text-xs text-slate-500 font-medium">PAVANCAB Goa - Dispatch Tower - All Rights Reserved</footer>
+
+  <script src="../api_client.js"></script>
+  <script src="../ui_helpers.js"></script>
+  <script>
+  let teamData = [];
+
+  async function init() {
+    const me = await API.me();
+    if (!me || !me.user) { window.location.href = '../auth.php'; return; }
+    if (me.user.role !== 'admin' && (me.user.mobile || '').replace(/\D/g, '') !== '8199000000') { window.location.href = './index.html'; return; }
+
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('app-content').classList.remove('hidden');
+    await loadTeam();
+    lucide.createIcons();
+  }
+
+  async function loadTeam() {
+    const data = await API.dashTeam();
+    if (!Array.isArray(data)) return;
+    teamData = data;
+    renderTeam();
+  }
+
+  function renderTeamMemberHTML(tm) {
+    const name = tm.member_name || tm.name || 'Staff';
+    const phone = tm.member_phone || tm.phone || '';
+    const email = tm.member_email || tm.email || '';
+    return `<div class="uber-card p-4 rounded-2xl border border-slate-800 flex flex-wrap justify-between items-center gap-2 text-xs hover:border-slate-700 transition" data-team-id="${tm.id}">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-black">ðŸ‘¤</div>
+        <div>
+          <div class="flex items-center gap-2"><span class="font-black text-white">${UI.escapeHtml(name)}</span><span class="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 px-2 py-0.5 rounded font-bold uppercase">Dispatcher</span></div>
+          <span class="text-slate-400">ðŸ“ž ${UI.escapeHtml(phone)}</span>
+          ${email ? `<span class="text-slate-500 ml-1">Â· ${UI.escapeHtml(email)}</span>` : ''}
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="handleRemoveTeamMember(${tm.id})" class="text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-xl border border-red-500/30 transition flex items-center gap-1 font-bold text-xs"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remove</button>
+      </div>
+    </div>`;
+  }
+
+  function renderTeam() {
+    const list = document.getElementById('team-list-container');
+    const adminTile = list.querySelector('.border-amber-400\\/40') || list.firstElementChild;
+    let html = adminTile ? adminTile.outerHTML : '';
+    if (teamData.length === 0) {
+      html += `<div class="uber-card p-8 rounded-2xl text-center text-slate-400 border border-slate-800 space-y-1" id="team-empty"><p class="text-xs font-bold text-white">No additional team members added yet.</p><p class="text-[11px] text-slate-500">Use the form on the left to add dispatch staff.</p></div>`;
+    } else {
+      html += teamData.map(renderTeamMemberHTML).join('');
+    }
+    list.innerHTML = html;
+    document.getElementById('team-count').textContent = teamData.length;
+    lucide.createIcons();
+  }
+
+  async function handleAddTeamMember(e) {
+    e.preventDefault();
+    const name = document.getElementById('new_team_name').value.trim();
+    const phone = document.getElementById('new_team_phone').value.trim();
+    const email = document.getElementById('new_team_email').value.trim();
+    const msg = document.getElementById('team-add-msg');
+    msg.innerHTML = '<span class="text-amber-400 font-bold">Saving team member...</span>';
+    try {
+      const data = await API.dashTeamAdd({ member_name: name, member_phone: phone, member_email: email, role: 'team' });
+      if (data.success) {
+        msg.innerHTML = '<span class="text-emerald-400 font-bold">âœ“ Team Member added!</span>';
+        document.getElementById('new_team_name').value = '';
+        document.getElementById('new_team_phone').value = '';
+        document.getElementById('new_team_email').value = '';
+        await loadTeam();
+      } else { msg.innerHTML = `<span class="text-red-400 font-bold">${data.error || 'Failed to add member'}</span>`; }
+    } catch(e) { msg.innerHTML = '<span class="text-red-400 font-bold">Network error</span>'; }
+  }
+
+  async function handleRemoveTeamMember(memberId) {
+    if (!confirm('Revoke dispatch dashboard access for this team member?')) return;
+    try {
+      const data = await API.dashTeamRemove(memberId);
+      if (data.success) await loadTeam();
+      else alert(data.error || 'Failed to remove');
+    } catch(e) { alert('Network error'); }
+  }
+
+  init();
+  </script>
+</body>
+</html>
