@@ -45,6 +45,7 @@ import com.pavancab.dispatch.ui.reports.ReportsScreen
 import com.pavancab.dispatch.ui.drivers.DriverDetailScreen
 import com.pavancab.dispatch.ui.bookings.EditBookingScreen
 import com.pavancab.dispatch.ui.theme.*
+import com.pavancab.dispatch.ui.UpdateCheckHost
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
 
@@ -62,7 +63,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DispatchTheme {
-                DispatchNav()
+                UpdateCheckHost {
+                    DispatchNav()
+                }
             }
         }
     }

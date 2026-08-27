@@ -45,6 +45,7 @@ import com.pavancab.driver.ui.ride.MyRidesScreen
 import com.pavancab.driver.ui.subscription.SubscriptionScreen
 import com.pavancab.driver.ui.wallet.WalletScreen
 import com.pavancab.driver.ui.theme.*
+import com.pavancab.driver.ui.UpdateCheckHost
 import com.google.firebase.messaging.FirebaseMessaging
 import com.razorpay.Checkout
 import com.razorpay.PaymentResultListener
@@ -71,7 +72,11 @@ class MainActivity : ComponentActivity(), PaymentResultListener {
         super.onCreate(savedInstanceState)
         requestPermissions()
         Checkout.preload(applicationContext)
-        setContent { DriverAppContent(this) }
+        setContent {
+            UpdateCheckHost {
+                DriverAppContent(this)
+            }
+        }
     }
 
     private fun requestPermissions() {

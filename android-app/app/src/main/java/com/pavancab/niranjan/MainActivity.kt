@@ -38,8 +38,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.google.firebase.messaging.FirebaseMessaging
 import com.pavancab.niranjan.data.Repository
+import com.pavancab.niranjan.data.UpdateInfo
+import com.pavancab.niranjan.data.UpdateManager
 import com.pavancab.niranjan.data.UserPrefs
 import com.pavancab.niranjan.network.ApiClient
+import com.pavancab.niranjan.ui.UpdateDialog
 import com.pavancab.niranjan.ui.auth.AuthScreen
 import com.pavancab.niranjan.ui.booking.BookingConfirmScreen
 import com.pavancab.niranjan.ui.home.HomeScreen
@@ -156,6 +159,7 @@ fun PavanCabApp(notifBookingId: String = "") {
     var currentTab by remember { mutableStateOf(BottomTab.Book) }
     var sessionReady by remember { mutableStateOf(false) }
     var ridesRefresh by remember { mutableIntStateOf(0) }
+    var updateInfo by remember { mutableStateOf<UpdateInfo?>(null) }
 
     // FCM push wakes the current screen so ride status updates live (no tab switch / reopen needed)
     val appContext = context.applicationContext
@@ -238,6 +242,15 @@ fun PavanCabApp(notifBookingId: String = "") {
         sessionReady = true
     }
 
+    // Check for an app update once on launch
+    LaunchedEffect(Unit) {
+        try {
+            updateInfo = UpdateManager.check(context)
+        } catch (e: Exception) {
+            CrashLogger.log("UPDATE", "check failed: ${e.message}", "NavHost", e)
+        }
+    }
+
     // Notification deep-link: jump to the ride mentioned in the push
     LaunchedEffect(notifBookingId, sessionReady) {
         if (sessionReady && notifBookingId.isNotBlank()) {
@@ -280,6 +293,7 @@ fun PavanCabApp(notifBookingId: String = "") {
         }
     }
 
+    Box(modifier = Modifier.fillMaxSize()) {
     if (checkingSession) {
         // ══════ GOA PARADISE SPLASH ══════
         val pulse = rememberInfiniteTransition(label = "splash")
@@ -334,10 +348,8 @@ fun PavanCabApp(notifBookingId: String = "") {
                 Text("Baga \u2022 Calangute \u2022 Anjuna \u2022 Panaji \u2022 Airport & more", color = Gray500, fontSize = 9.sp)
             }
         }
-        return
-    }
-
-    when (val screen = currentScreen) {
+    } else {
+        when (val screen = currentScreen) {
         is Screen.Auth -> {
             AuthScreen(onLoginSuccess = {
                 currentScreen = Screen.Main(BottomTab.Rides)
@@ -403,5 +415,18 @@ fun PavanCabApp(notifBookingId: String = "") {
         is Screen.Notifications -> {
             NotificationsScreen(onBack = { currentScreen = Screen.Main(BottomTab.Book) })
         }
+        }
+    }
+
+    updateInfo?.let { info ->
+        UpdateDialog(
+            info = info,
+            onRemindLater = {
+                UpdateManager.rememberDismissed(context, info.latestVersionCode)
+                updateInfo = null
+            },
+            onDismiss = { updateInfo = null }
+        )
+    }
     }
 }

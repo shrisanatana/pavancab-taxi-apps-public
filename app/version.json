@@ -1,0 +1,23 @@
+{
+  "com.pavancab.niranjan": {
+    "latestVersionCode": 5,
+    "latestVersionName": "1.4",
+    "forceUpdate": false,
+    "message": "WhatsApp OTP login, fare offers from multiple drivers, live ride tracking, emergency alert and more are ready for you.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.pavancab.niranjan"
+  },
+  "com.pavancab.dispatch": {
+    "latestVersionCode": 5,
+    "latestVersionName": "1.4",
+    "forceUpdate": false,
+    "message": "Assign drivers, manage bookings and commission, track the live fleet and handle reports — all updated and improved.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.pavancab.dispatch"
+  },
+  "com.pavancab.driver": {
+    "latestVersionCode": 5,
+    "latestVersionName": "1.4",
+    "forceUpdate": false,
+    "message": "Accept rides, offer your own fare, pay subscription online and track your wallet — everything is updated.",
+    "playStoreUrl": "https://play.google.com/store/apps/details?id=com.pavancab.driver"
+  }
+}
