@@ -23,6 +23,18 @@ one shared system for bookings, driver offers, WhatsApp OTP auth, Razorpay payme
 
 This is the **full open-source architecture**: clean, readable, and structured so that students, freelancers, and startup developers can study, run, and extend a real-world fleet-operator system.
 
+### 📦 Download the apps (ready-to-install builds)
+
+Pre-built, signed **APK + AAB** for all three apps are in the [`releases/`](releases/) folder:
+
+| App | APK (install) | AAB (Play Store) |
+|-----|---------------|------------------|
+| **Passenger** | `PavanCab-Passenger-release.apk` | `PavanCab-Passenger-release.aab` |
+| **Dispatch** | `PavanCab-Dispatch-release.apk` | `PavanCab-Dispatch-release.aab` |
+| **Driver** | `PavanCab-Driver-release.apk` | `PavanCab-Driver-release.aab` |
+
+> Install the `.apk` directly on any Android device (enable "Install unknown apps"). The `.aab` is for uploading to the **Google Play Console**.
+
 > 🔒 **Security note:** All changeable credentials (WhatsApp, Razorpay, database, admin) live in a single `.env` file — **no secrets hardcoded in the code**. See [Configuration](#configuration).
 
 ---
