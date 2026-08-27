@@ -1,65 +1,99 @@
-# PavanCab — Goa Taxi Booking Platform
+<div align="center">
 
-**PavanCab** is a complete, production-ready taxi-booking platform for Goa, India. It ships as **three native Android apps** (Passenger, Dispatch, and Driver) plus a **PHP + MySQL backend** with a web admin dashboard. Everything runs against one shared backend at `https://pavancab.com/`.
+# 🚕 PavanCab — Goa Taxi Booking Platform
 
-This is the full source code of the platform, structured for anyone (from students to studio developers) to read, run, and deploy. All changeable credentials are kept in a single `.env` file — no secrets are hardcoded in the code (see [Configuration](#configuration)).
+**A complete ride-hailing & taxi-booking operating system for Goa, India.**
+
+3 native Android apps (Passenger · Dispatch · Driver) + a PHP/MySQL backend —
+one shared system for bookings, driver offers, WhatsApp OTP auth, Razorpay payments, and FCM push notifications.
+
+![Android](https://img.shields.io/badge/Android-Kotlin-brightgreen?logo=android&logoColor=white)
+![Backend](https://img.shields.io/badge/Backend-PHP%208.2-blue?logo=php&logoColor=white)
+![Database](https://img.shields.io/badge/Database-MySQL-orange?logo=mysql&logoColor=white)
+![Payments](https://img.shields.io/badge/Payments-Razorpay-blueviolet)
+![Auth](https://img.shields.io/badge/Auth-WhatsApp%20OTP-25D366?logo=whatsapp&logoColor=white)
+
+</div>
 
 ---
 
-## ✨ Feature Highlights
+## What is PavanCab?
 
-### 📱 Passenger App (`android-app/` — package `com.pavancab.niranjan`)
-- OTP login delivered via **WhatsApp Business API** (number-based auth).
-- Book a taxi (car type, pickup/drop, date-time, local & outstation).
-- See **multiple driver offers** with proposed fares and accept the best one.
-- Live ride status, driver details, fare proposals, and negotiated fares.
-- Rate & review the driver after the trip.
-- Emergency alert button that notifies the dispatch team with live location.
-- Ride reports & safety incident reporting.
-- Firebase push notifications for ride updates.
+**PavanCab** is a production-ready **taxi booking app** / **cab management system** built for the travel and tourism market in **Goa, India**. It covers the entire ride lifecycle — from a passenger booking a cab and receiving **WhatsApp OTP** login, to **drivers bidding on rides**, negotiating **fares**, and getting paid through **Razorpay** subscriptions and wallets, all coordinated by a central **dispatch team**.
 
-### 📟 Dispatch App (`dispatch-app/` — package `com.pavancab.dispatch`)
-- Office / operations dashboard on mobile.
-- Create and manage bookings (app, phone, and manual sources).
+This is the **full open-source architecture**: clean, readable, and structured so that students, freelancers, and startup developers can study, run, and extend a real-world fleet-operator system.
+
+> 🔒 **Security note:** All changeable credentials (WhatsApp, Razorpay, database, admin) live in a single `.env` file — **no secrets hardcoded in the code**. See [Configuration](#configuration).
+
+---
+
+## 📑 Table of Contents
+
+- [Key Features](#-key-features)
+- [Repository Structure](#-repository-structure)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [Configuration](#-configuration)
+- [API Overview](#-api-overview)
+- [Screenshots](#-screenshots)
+- [Live Site](#-live-site)
+- [Roadmap](#-roadmap)
+- [License](#-license)
+
+---
+
+## ✨ Key Features
+
+### 📱 Passenger App — taxi booking for customers
+`android-app/` · package `com.pavancab.niranjan`
+- Login with **WhatsApp OTP** (Meta WhatsApp Business Cloud API).
+- Book local & outstation cabs — car type, pickup/drop, date & time.
+- **Reverse-bidding:** receive multiple **driver fare offers** and accept the best one.
+- Live ride status, driver details, fare negotiation, and confirmation.
+- Rating & review, **emergency alert** with live location, and safety ride reports.
+- **FCM push notifications** for every ride update.
+
+### 📟 Dispatch App — fleet & operations tower
+`dispatch-app/` · package `com.pavancab.dispatch`
+- Create & manage bookings (app, phone, manual sources).
 - **Assign / reassign drivers**, freeze or cancel rides.
-- Approve new drivers, manage commission status (paid / pending / waived).
-- Team management with role-based permissions.
-- Live view of drivers, system settings, and ride reports.
-- Push notifications for new rides and alerts.
+- Approve drivers; manage **commission** (paid / pending / waived).
+- Team management with **role-based permissions**, live driver view, ride reports.
+- Push notifications for new rides & alerts.
 
-### 🚖 Driver App (`driver-app/` — package `com.pavancab.driver`)
-- OTP login via WhatsApp, view and edit profile, vehicle & number plate.
-- See **new ride opportunities** and **offer your own fare** (reverse bidding).
-- Accept / decline rides; trip lifecycle (accept → on-trip → complete).
-- **Earn & pay**: pay subscription/commission online via **Razorpay**, and manage a **driver wallet**.
-- Online/offline toggle, subscription status & reminders.
-- Driver ratings and review history.
+### 🚖 Driver App — earn with your cab
+`driver-app/` · package `com.pavancab.driver`
+- WhatsApp OTP login; manage profile, vehicle & number plate.
+- See **new ride opportunities** and **offer your own fare**.
+- Trip lifecycle: accept → on-trip → complete.
+- **Pay subscription / commission online with Razorpay** and manage a **driver wallet**.
+- Online/offline toggle, subscription status & renewals, ratings.
 
-### 🌐 Web Backend & Dashboard (`app/`)
-- PHP (8.2) + MySQL REST-style API used by all three apps.
-- Web **admin dashboard** (`/app/`) for full operational control.
-- WhatsApp OTP engine, **FCM push notifications** (Firebase), auto-migrations on boot.
-- Razorpay payment integration (test / live modes), driver wallet transactions.
-- Cron jobs (subscription expiry, driver online timeout, reminders, hourly ops).
-- Ship includes the full **MySQL schema** in [`app/database.sql`](app/database.sql).
+### 🌐 Web Backend & Admin Dashboard
+`app/`
+- PHP **8.2** + MySQL REST-style API powering all 3 apps.
+- Web **admin dashboard** for full operational control.
+- WhatsApp OTP engine, **FCM v1 push**, auto-migrations on boot.
+- **Razorpay** integration (test / live), driver wallet transactions.
+- Cron jobs (subscription expiry, driver timeouts, reminders, hourly ops).
+- Ships with the complete **MySQL schema**: [`app/database.sql`](app/database.sql).
 
 ---
 
 ## 🗂 Repository Structure
 
 ```
-├── android-app/              # Passenger Android app (Kotlin, Jetpack Compose / XML)
-├── dispatch-app/             # Dispatch/office Android app
-├── driver-app/               # Driver Android app
-├── app/                      # PHP + MySQL backend & web admin dashboard
-│   ├── api/                  #   JSON API endpoints (driver / dispatch / passenger)
-│   ├── dashboard/            #   Web admin dashboard
-│   ├── db.php                #   DB config, helpers, auto-migrations
-│   ├── auth*.php             #   Auth / OTP / session logic
-│   ├── cron.php / each-min-cron.php / hourly.php   #   Scheduled jobs
-│   ├── database.sql          #   Complete MySQL schema (structure, no data)
-│   └── .htaccess
-├── .env.example              # Template for all credentials (safe to share)
+├── android-app/      # Passenger app (Kotlin)
+├── dispatch-app/     # Dispatch / operations app (Kotlin)
+├── driver-app/       # Driver app (Kotlin)
+├── app/              # PHP + MySQL backend & web dashboard
+│   ├── api/          #   JSON API (driver / dispatch / passenger)
+│   ├── dashboard/    #   Web admin dashboard
+│   ├── db.php        #   DB config, helpers, auto-migrations
+│   ├── auth*.php     #   Auth / OTP / session logic
+│   ├── cron.php      #   Scheduled jobs
+│   └── database.sql  #   Full MySQL schema (structure only)
+├── .env.example      # Credential template (safe)
 └── README.md
 ```
 
@@ -67,87 +101,121 @@ This is the full source code of the platform, structured for anyone (from studen
 
 ## 🛠 Tech Stack
 
-| Layer      | Technology |
-|------------|------------|
-| **Android** | Kotlin, Jetpack Compose / XML, Retrofit / OkHttp, Firebase (FCM) |
-| **Backend** | PHP 8.2, MySQL (MariaDB), REST JSON API |
-| **Payments** | Razorpay (test & live modes) |
+| Layer        | Technology |
+|--------------|------------|
+| **Mobile**   | Kotlin · Jetpack Compose / XML · Retrofit / OkHttp |
+| **Push**     | Firebase Cloud Messaging (FCM v1) |
 | **Auth / OTP** | Meta WhatsApp Business Cloud API |
-| **Push** | Firebase Cloud Messaging (FCM v1) |
-| **Deploy** | cPanel / public_html via FTP/SFTP |
+| **Backend**  | PHP 8.2 · MySQL (MariaDB) · REST JSON API |
+| **Payments** | Razorpay (test & live modes) |
+| **Deploy**   | cPanel / public_html (FTP/SFTP) |
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Android apps
-Each app is a standard Gradle Android project.
+### 1. Run the Android apps
+Each app is a standard Gradle project.
 
 ```bash
-# In android-app/, dispatch-app/, or driver-app/:
 export JAVA_HOME=<your JDK 17 path>
 export ANDROID_HOME=<your Android SDK path>
 
-# Build a Play-Store bundle (AAB):
+# Play-Store bundle (AAB):
 ./gradlew bundleRelease --offline
-
-# Build an installable APK:
+# Installable APK:
 ./gradlew assembleRelease --offline
 ```
 
-Outputs land in `app/build/outputs/bundle/release/` and `app/build/outputs/apk/release/`.
+Outputs: `app/build/outputs/bundle/release/` and `app/build/outputs/apk/release/`.
 
-> Android signing passwords live in each app's local `app/keystore.properties` (git-ignored). Do **not** commit the `.jks` keystores or `keystore.properties` to a public repo — losing them means you can never update the app on the Play Store.
+> **Signing:** passwords live in each app's local `app/keystore.properties` (git-ignored). Never commit `.jks` keystores to a public repo.
 
-### 2. Backend
-1. Copy `.env.example` to `.env` and fill in real values (database, WhatsApp, Razorpay).
-2. Upload the `app/` folder into your web root (e.g. `public_html/app/`).
-3. Import `app/database.sql` into your MySQL database.
-4. Tables are **auto-created/migrated** on first run, so the app works even without a manual import.
+### 2. Run the backend
+1. `cp .env.example .env` and fill in real values.
+2. Upload the `app/` folder to your web root (`public_html/app/`).
+3. Import `app/database.sql`. Tables also **auto-migrate** on first boot.
 
-### 3. Configuration
-All changeable credentials are read from **`.env`** at runtime — the code never hardcodes them:
+---
+
+## 🔐 Configuration
+
+All credentials are read from **`.env`** at runtime — never from code:
 
 ```
 # Database
-DB_HOST=...
-DB_USER=...
-DB_PASS=...
-DB_NAME=...
+DB_HOST=...        DB_USER=...        DB_PASS=...        DB_NAME=...
 
 # WhatsApp (Meta) OTP
-DEFAULT_META_WA_TOKEN=...
-DEFAULT_META_WA_PHONE_ID=...
+DEFAULT_META_WA_TOKEN=...        DEFAULT_META_WA_PHONE_ID=...
 
 # Admin / support
-SUPER_ADMIN_EMAIL=...
-SUPER_ADMIN_PHONE=...
+SUPER_ADMIN_EMAIL=...            SUPER_ADMIN_PHONE=...
 
 # Firebase / FCM
 FCM_VAPID_KEY=...
 
 # Razorpay
-RAZORPAY_MODE=test            # test | live
+RAZORPAY_MODE=test               # test | live
 RAZORPAY_KEY_ID=rzp_test_...
 RAZORPAY_KEY_SECRET=...
-RAZORPAY_PROD_KEY_ID=          # fill for live mode
+RAZORPAY_PROD_KEY_ID=            # fill for live mode
 RAZORPAY_PROD_KEY_SECRET=
 ```
 
-The `.env` file is **git-ignored** and never uploaded. Push notifications use per-app `google-services.json` files (final, unchanged).
+`.env` is **git-ignored** and never uploaded. Push uses per-app `google-services.json` (final, unchanged).
+
+---
+
+## 🔌 API Overview
+
+All three apps share the backend REST API:
+
+| App      | Endpoint |
+|----------|----------|
+| Passenger | `app/api/passenger/index.php` |
+| Dispatch  | `app/api/dispatch/index.php` |
+| Driver    | `app/api/driver/index.php` |
+
+---
+
+## 📸 Screenshots
+
+> _Coming soon — add your app screenshots here to showcase the UI._
 
 ---
 
 ## 🌍 Live Site
-- **Website / admin dashboard:** https://pavancab.com/
+
+- **Website / Admin Dashboard:** https://pavancab.com/
 - **API base:** `https://pavancab.com/app/`
 
 ---
 
-## 📄 License & Support
-This repository is **private** and intended for the PavanCab team and their developers.
-For support, contact the admin via the details configured in `.env` (see `SUPER_ADMIN_EMAIL` / `SUPER_ADMIN_PHONE`).
+## 🗺 Roadmap
+
+- [x] Passenger · Dispatch · Driver apps
+- [x] WhatsApp OTP authentication
+- [x] Driver reverse-bidding & fare offers
+- [x] Razorpay subscriptions, commissions & wallet
+- [x] FCM push notifications
+- [ ] iOS apps
+- [ ] Multi-language (incl. Konkani / Hindi)
+- [ ] Analytics dashboard & driver reports
 
 ---
 
-*PavanCab — Goa's own taxi booking platform. Ride local. Ride safe.*
+## 📄 License
+
+This repository is published for **demonstration and learning** purposes by the PavanCab team.
+**All rights reserved** unless otherwise licensed. Contact the maintainers for commercial use or collaboration.
+
+---
+
+<div align="center">
+
+**PavanCab — Goa's own taxi booking platform. Ride local. Ride safe.**
+
+🔗 [pavancab.com](https://pavancab.com)
+
+</div>
